@@ -4,7 +4,7 @@ interface BarcodeIO: An Interface (which you define) called BarcodeIO that defin
 which might implement it.
 
 Phase 2:
-class BarcodeImage implements Cloneable.An object of this BarcodeImage class will be one of the main member-objects of the class 
+class BarcodeImage implements Cloneable. An object of this BarcodeImage class will be one of the main member-objects of the class 
 that comes next. BarcodeImage will describe the 2D dot-matrix pattern, or "image".  It will contain some methods for storing, modifying 
 and retrieving the data in a 2D image. The interpretation of the data is not part of this class.  Its job is only to manage the optical 
 data. It will implement Cloneable interface because it contains deep data.
