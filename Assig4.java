@@ -99,3 +99,29 @@ class DataMatrix implements BarcodeIO
 {
    
 }
+
+
+
+
+//Phase 3
+
+/*
+ *  DataMatrix Class
+ */
+public class DataMatrix implements BarcodeIO {
+
+	// Fields
+	public static final char BLACK_CHAR = '*';
+	public static final char WHITE_CHAR = ' ';
+	private BarcodeImage image;
+	private String text;
+	private int actualWidth;
+	private int actualHeight;
+
+	// Constructor (no argument)
+	public DataMatrix() {
+		scan(new BarcodeImage());
+		readText("");
+		actualWidth = 0;
+		actualHeight = 0;
+	}
