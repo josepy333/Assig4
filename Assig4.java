@@ -88,10 +88,140 @@ interface BarcodeIO
    public void displayImageToConsole();
 }
 
-// contains methods to store, modify, and retrieve data in a 2D image
+/*
+ * BarcodeImage Class
+ * Contains methods to store, modify, and retrieve data in a 2D image
+ */
 class BarcodeImage implements Cloneable
 {
+   public static final int MAX_HEIGHT = 30;
+   public static final int MAX_WIDTH = 65;
    
+   private boolean[][] image_data;
+   
+   
+   /* Default Constructor
+    * Creates a 2D array and inserts empty data into it (false).
+    */
+   public BarcodeImage() 
+   {
+      image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+      
+      for (int i = 0; i < MAX_HEIGHT; i++)
+      {
+         for (int k = 0; k < MAX_WIDTH; k++)
+         {
+            image_data[i][k] = false;
+         }
+      }
+   }
+   
+   
+   /* Non-Default Constructor 
+    * Accepts a 1D array of strings as an argument and converts it into a 2D array of bools.
+    */
+   public BarcodeImage(String[] str_data)
+   {
+      image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+      
+      // Validate the length of str_data input
+      if (checkSize(str_data) == true) 
+      {
+         for (int i = 0; i < str_data.length; i++)
+         {
+            for (int k = 0; k < str_data[i].length(); k++)
+            {
+               if (str_data[i].charAt(k) == '*')
+               {
+                  image_data[MAX_HEIGHT - str_data.length + i][k] = true;
+               }
+               else
+               {
+                  image_data[MAX_HEIGHT - str_data.length + i][k] = false;
+               }
+            }
+         }
+      }
+      
+      // checkSize failed
+      else 
+      {
+         System.out.println("The supplied data was not valid. Please try again.");
+      }
+      
+   }
+   
+   
+   /*
+    * Accessor - getPixel
+    * Validates the values for row and column to ensure they are within
+    * bounds of 0 and MAX_HEIGHT and MAX_WIDTH.
+    * Returns the pixel at [row][column] if valid.
+    * Returns false if not valid.
+    */
+   public boolean getPixel(int row, int col)
+   {
+      if (row < 0 || col < 0)
+      {
+         return false;
+      }
+      if (col > MAX_WIDTH || row > MAX_HEIGHT)
+      {
+         return false;
+      }
+      
+      return image_data[row][col];
+   }
+   
+   
+   /*
+    * Mutator - setPixel
+    * Validates the values for row and column to ensure they are within
+    * bounds of 0 and MAX_HEIGHT and MAX_WIDTH
+    * Returns true and sets the pixel at [row][column] if valid
+    * Returns false if not valid.
+    */
+   public boolean setPixel(int row, int col, boolean value)
+   {
+      if (row < 0 || col < 0)
+      {
+         return false;
+      }
+      if (col > MAX_WIDTH || row > MAX_HEIGHT)
+      {
+         return false;
+      }
+
+      image_data[row][col] = value;
+      
+      return true;
+   }
+   
+   
+   /* checkSize
+    * A private util used to validate whether the string data passed into the BarcodeImage
+    * non-default constructor is within the bounds of MAX_HEIGHT and MAX_WIDTH, is not zero or null.
+    * Returns false if the lenght of the data is equal to, or less than zero, or greater than 
+    * MAX_HEIGHT or MAX_WIDTH.
+    * Returns true if the size is valid.
+    */
+   private boolean checkSize(String[] data) 
+   {
+      if (data.length <= 0) {
+         return false;
+      }
+      if (data.length > MAX_HEIGHT) {
+         return false;
+      }
+      if (data.length > MAX_WIDTH) {
+         return false;
+      }
+      if (data == null) {
+         return false;
+      }
+      
+      return true;
+   }
 }
 
 //Phase 3
