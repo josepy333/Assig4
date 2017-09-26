@@ -284,7 +284,7 @@ class DataMatrix implements BarcodeIO
       actualHeight = 0;
    }
    
-   public boolean scan(BarcodeImage bc)
+   public boolean scan(final BarcodeImage bc)
    {
       try
       {
@@ -401,9 +401,9 @@ class DataMatrix implements BarcodeIO
    }
    
    // Encodes a string into a barcode image
-   public boolean readText(String text)
+   public boolean readText(final String text)
    {
-      if(text.length() < barcodeImage.MAX_WIDTH)
+      if(text.length() < image.MAX_WIDTH)
       {
          this.text = text + "*";
          return true;
