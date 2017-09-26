@@ -113,11 +113,28 @@ class DataMatrix implements BarcodeIO
    // Constructor (no argument)
    public DataMatrix()
    {
-      scan(new BarcodeImage());
-      readText("");
+      image = new BarcodeImage();
+      text = "";
       actualWidth = 0;
       actualHeight = 0;
    }
+   
+   // Constructor
+   public DataMatrix(BarcodeImage image)
+   {
+      scan(image);
+      text = "";
+   }
+   
+   // Constructor
+   public DataMatrix(String text)
+   {
+      readText(text);
+      image = new BarcodeImage();
+      actualWidth = 0;
+      actualHeight = 0;
+   }
+   
    public boolean scan(BarcodeImage bc)
    {
       
