@@ -165,7 +165,7 @@ class BarcodeImage implements Cloneable
       {
          return false;
       }
-      if (col > MAX_WIDTH || row > MAX_HEIGHT)
+      if (row > MAX_HEIGHT || col > MAX_WIDTH)
       {
          return false;
       }
@@ -187,7 +187,7 @@ class BarcodeImage implements Cloneable
       {
          return false;
       }
-      if (col > MAX_WIDTH || row > MAX_HEIGHT)
+      if (row > MAX_HEIGHT || col > MAX_WIDTH)
       {
          return false;
       }
