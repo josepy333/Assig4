@@ -163,6 +163,7 @@ class DataMatrix implements BarcodeIO
       shiftImageDown(verticalScanner());
    }
    
+   // Shifts the image all the way down
    private void shiftImageDown(int offset)
    {
       if(offset == BarcodeImage.MAX_HEIGHT - 1)
@@ -179,6 +180,7 @@ class DataMatrix implements BarcodeIO
       }
    }
    
+   // Shifts the image all the way to the left
    private void shiftImageLeft(int offset)
    {
       if(offset == 0)
@@ -227,6 +229,18 @@ class DataMatrix implements BarcodeIO
       throw new RuntimeException("ERROR SCANNING");
    }
    
+   // Accessor method to get the actual width
+   public int getActualWidth()
+   {
+      return actualWidth;
+   }
+   
+   // Accessor method to get the actual height
+   public int getActualHeight()
+   {
+      return actualHeight;
+   }
+   
    private int computeSignalWidth()
    {
       
@@ -236,10 +250,18 @@ class DataMatrix implements BarcodeIO
    {
       
    }
+   
+   // Encodes a string into a barcode image
    public boolean readText(String text)
    {
-      
+      if(text.length() < barcodeImage.MAX_WIDTH)
+      {
+         this.text = text + "*";
+         return true;
+      }
+      return false;
    }
+   
    public boolean generateImageFromText()
    {
       
