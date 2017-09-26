@@ -410,15 +410,60 @@ class DataMatrix implements BarcodeIO
       }
       return false;
    }
-   
-   public boolean generateImageFromText()
-   {
-      
-   }
-   public boolean translateImageToText()
-   {
-      
-   }
+   // Method to generate BarcodeImage from text
+   public boolean generateImageFromText() {
+		String[] str_data = new String[10];
+		for (int i = 0; i < str_data.length; i++) {
+			str_data[i] = ""+BLACK_CHAR;
+		}
+		for (int col = 1; col <= text.length(); col++) {
+			int ascii = (int) text.charAt(col-1);
+			for (int row = 1; row <= str_data.length - 2; row++) {
+				int y = Math.abs(row - (str_data.length - 2));
+				int yval = (int) Math.pow(2, y);
+				if (yval <= ascii) {
+					ascii -= yval;
+					str_data[row] += BLACK_CHAR;
+				} else {
+					str_data[row] += WHITE_CHAR;
+				}
+			}
+		}
+		for (int i = 0; i < text.length() + 1; i++) {
+			if (i % 2 == 0)
+				str_data[0] += WHITE_CHAR;
+			else
+				str_data[0] += BLACK_CHAR;
+			str_data[str_data.length-1] += BLACK_CHAR;
+		}
+		for (int i = 1; i < str_data.length - 1; i++) {
+			if (i % 2 == 0)
+				str_data[i] += WHITE_CHAR;
+			else
+				str_data[i] += BLACK_CHAR;
+		}
+		image = new BarcodeImage(str_data);
+		cleanImage();
+		return true;
+	}
+
+	// Method to generate text from BarcodeImage
+	
+  public boolean translateImageToText() {
+		text = "";
+		for (int col = 1; col <= getSignalWidth(); col++) {
+			int ascii = 0;
+			int i = 0;
+			for (int row = BarcodeImage.MAX_HEIGHT - 2; row >= BarcodeImage.MAX_HEIGHT - 1 - getSignalHeight(); row--) {
+				if (image.getPixel(row, col)) {
+					ascii += Math.pow(2, i);
+				}
+				i++;
+			}
+			text += (char) ascii;
+		}
+		return true;
+	}	
    public void displayTextToConsole()
    {
       
