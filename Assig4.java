@@ -137,6 +137,47 @@ class DataMatrix implements BarcodeIO
    
    public boolean scan(BarcodeImage bc)
    {
+      try
+      {
+         this.image = bc.clone();
+         cleanImage();
+         actualWidth = computeSignalWidth();
+         actualHeight = computeSignalHeight();
+         return true;
+      } catch (CloneNotSupportedException e)
+      {
+         // do nothing
+      }
+      return false; 
+   }
+   
+   private void cleanImage()
+   {
+      
+   }
+   
+   private void moveImageToLowerLeft()
+   {
+      
+   }
+   
+   private void shiftImageDown(int offset)
+   {
+      
+   }
+   
+   private void shiftImageLeft(int offset)
+   {
+      
+   }
+   
+   private int computeSignalWidth()
+   {
+      
+   }
+   
+   private int computeSignalHeight()
+   {
       
    }
    public boolean readText(String text)
