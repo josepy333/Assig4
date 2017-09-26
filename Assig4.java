@@ -153,22 +153,78 @@ class DataMatrix implements BarcodeIO
    
    private void cleanImage()
    {
-      
+      moveImageToLowerLeft();
    }
    
+   // Method that moves the image to the lower left corner
    private void moveImageToLowerLeft()
    {
-      
+      shiftImageLeft(horizontalScanner());
+      shiftImageDown(verticalScanner());
    }
    
    private void shiftImageDown(int offset)
    {
-      
+      if(offset == BarcodeImage.MAX_HEIGHT - 1)
+      {
+         return;
+      }
+      for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
+      {
+         for(int row = offset; row >= 0; row++)
+         {
+            image.setPixel(row + (BarcodeImage.MAX_HEIGHT - offset - 1), col, image.getPixel(row, col));
+            image.setPixel(row, col, false);
+         }
+      }
    }
    
    private void shiftImageLeft(int offset)
    {
-      
+      if(offset == 0)
+      {
+         return;
+      }
+      for(int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
+      {
+         for(int col = offset; col < BarcodeImage.MAX_WIDTH; col++)
+         {
+            image.setPixel(row, (col - offset), image.getPixel(row, col));
+            image.setPixel(row, col, false);
+         }
+      }
+   }
+   
+   // Scans the image horizontally
+   private int horizontalScanner()
+   {
+      for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
+      {
+         for(int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
+         {
+            if(image.getPixel(row, col))
+            {
+               return col;
+            }
+         }
+      }
+      throw new RuntimeException("ERROR SCANNING");
+   }
+   
+   // Scans image vertically
+   private int verticalScanner()
+   {
+      for(int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
+      {
+         for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
+         {
+            if(image.getPixel(row, col))
+            {
+               return row;
+            }
+         }
+      }
+      throw new RuntimeException("ERROR SCANNING");
    }
    
    private int computeSignalWidth()
