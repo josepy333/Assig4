@@ -198,6 +198,25 @@ class BarcodeImage implements Cloneable
    }
    
    
+   /*
+    * clone
+    * An overridden version of clone from Cloneable
+    */
+   public BarcodeImage clone()
+   {
+      try
+      {
+         BarcodeImage cloned = (BarcodeImage)super.clone();
+         cloned.image_data = image_data.clone();
+         return cloned;
+      }
+      catch (CloneNotSupportedException e)
+      {
+         return null;
+      }  
+   }
+   
+   
    /* checkSize
     * A private util used to validate whether the string data passed into the BarcodeImage
     * non-default constructor is within the bounds of MAX_HEIGHT and MAX_WIDTH, is not zero or null.
