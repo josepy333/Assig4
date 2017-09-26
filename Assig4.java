@@ -94,34 +94,53 @@ class BarcodeImage implements Cloneable
    
 }
 
-// scans a copy of image and displays image and translated text to console
-class DataMatrix implements BarcodeIO
-{
-   
-}
-
-
-
-
 //Phase 3
 
 /*
  *  DataMatrix Class
+ *  scans a copy of image and displays image and translated text to console
  */
-public class DataMatrix implements BarcodeIO {
+class DataMatrix implements BarcodeIO 
+{
+   // Fields
+   public static final char BLACK_CHAR = '*';
+   public static final char WHITE_CHAR = ' ';
+   private BarcodeImage image;
+   private String text;
+   private int actualWidth;
+   private int actualHeight;
 
-	// Fields
-	public static final char BLACK_CHAR = '*';
-	public static final char WHITE_CHAR = ' ';
-	private BarcodeImage image;
-	private String text;
-	private int actualWidth;
-	private int actualHeight;
-
-	// Constructor (no argument)
-	public DataMatrix() {
-		scan(new BarcodeImage());
-		readText("");
-		actualWidth = 0;
-		actualHeight = 0;
-	}
+   // Constructor (no argument)
+   public DataMatrix()
+   {
+      scan(new BarcodeImage());
+      readText("");
+      actualWidth = 0;
+      actualHeight = 0;
+   }
+   public boolean scan(BarcodeImage bc)
+   {
+      
+   }
+   public boolean readText(String text)
+   {
+      
+   }
+   public boolean generateImageFromText()
+   {
+      
+   }
+   public boolean translateImageToText()
+   {
+      
+   }
+   public void displayTextToConsole()
+   {
+      
+   }
+   public void displayImageToConsole()
+   {
+      
+   }
+		
+}
