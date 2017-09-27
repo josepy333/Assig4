@@ -464,9 +464,8 @@ class DataMatrix implements BarcodeIO
 		}
 		return true;
 	}	
-   public void displayTextToConsole()
-   {
-      
+   public void displayTextToConsole() {
+		System.out.println(text);
    }
    public void displayImageToConsole()
    {
