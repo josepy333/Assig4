@@ -60,7 +60,6 @@ public class Assig4
         
         // creates BarcodeImage object to hold first barcode and sends to DataMatrix for decoding
         BarcodeImage bc = new BarcodeImage(sImageIn);
-        System.out.println("TEST");
         DataMatrix dm = new DataMatrix(bc);
         
         // first secret message
@@ -87,11 +86,46 @@ public class Assig4
 // defines I/O and basic methods of DataMatrix class 
 interface BarcodeIO
 {
+   /**
+    * Accepts some image, represented as a BarcodeImage object to be described below, and stores a copy of this image
+    * @param bc Barcode Image
+    * @return boolean
+    */
    public boolean scan(BarcodeImage bc);
+   
+   /**
+    * Accepts a text string to be eventually encoded in an image. No translation is done here
+    * @param text String to convert
+    * @return boolean
+    */
    public boolean readText(String text);
+   
+   /**
+    * Generates an image from the given text
+    * Looks at the internal text stored in the implementing class and produces a companion BarcodeImage, internally 
+    * (or an image in whatever format the implementing class uses).  After this is called, we expect the implementing 
+    * object to contain a fully-defined image and text that are in agreement with each other.
+    * @return boolean
+    */
    public boolean generateImageFromText();
+   
+   /**
+    * Translates a barcode into text
+    * Looks at the internal image stored in the implementing class, and produces a companion text string, internally. 
+    * After this is called, we expect the implementing object to contain a fully defined image and text that are in 
+    * agreement with each other.
+    * @return boolean
+    */
    public boolean translateImageToText();
+   
+   /**
+    * Prints out the text string to the console.
+    */
    public void displayTextToConsole();
+   
+   /**
+    * Prints out the image to the console.
+    */
    public void displayImageToConsole();
 }
 
@@ -286,19 +320,21 @@ class DataMatrix implements BarcodeIO
       actualHeight = 0;
    }
    
-   /*
-    * 
+   /**
+    * Accepts some image, represented as a BarcodeImage object to be described below, and stores a copy of this image
+    * @param bc Barcode Image
+    * @return boolean
     */
    public boolean scan(BarcodeImage bc)
    {
          this.image = bc.clone();
-         System.out.println("TEST");
          cleanImage();
          actualWidth = computeSignalWidth();
          actualHeight = computeSignalHeight();
          return true;
    }
    
+   // move the signal to the lower-left of the larger 2D array
    private void cleanImage()
    {
       moveImageToLowerLeft();
@@ -308,9 +344,7 @@ class DataMatrix implements BarcodeIO
    private void moveImageToLowerLeft()
    {
       shiftImageLeft(horizontalScanner());
-      System.out.println("TEST");
       shiftImageDown(verticalScanner());
-      System.out.println("TEST");
    }
    
    // Shifts the image all the way down
@@ -328,7 +362,6 @@ class DataMatrix implements BarcodeIO
             image.setPixel(row, col, false);
          }
       }
-      System.out.println("TEST");
    }
    
    // Shifts the image all the way to the left
@@ -362,7 +395,6 @@ class DataMatrix implements BarcodeIO
          }
       }
       return BarcodeImage.MAX_WIDTH - 1;
-      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Scans image vertically
@@ -375,14 +407,11 @@ class DataMatrix implements BarcodeIO
          {
             if(image.getPixel(row, col))
             {
-               System.out.println("TEST" + row);
-               
                return row;
             }
          }
       }
       return BarcodeImage.MAX_HEIGHT - 1;
-      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Accessor method to get the actual width
@@ -397,6 +426,7 @@ class DataMatrix implements BarcodeIO
       return actualHeight;
    }
    
+   // Computes the signal width
    private int computeSignalWidth()
    {
       for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
@@ -409,6 +439,7 @@ class DataMatrix implements BarcodeIO
       return BarcodeImage.MAX_WIDTH - 1;
    }
    
+   // Computes the signal height
    private int computeSignalHeight()
    {
       for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
@@ -431,6 +462,7 @@ class DataMatrix implements BarcodeIO
       }
       return false;
    }
+   
    // Method to generate BarcodeImage from text
    public boolean generateImageFromText() 
    {
@@ -479,33 +511,41 @@ class DataMatrix implements BarcodeIO
 
    // Method to generate text from BarcodeImage
         
-  public boolean translateImageToText() 
-  {
-     String translation = "";
-     for (int col = 1; col < getActualWidth(); col++)
-     {
-        int ascii = 0;
-        for (int row = BarcodeImage.MAX_HEIGHT - getActualHeight() + 1; row < BarcodeImage.MAX_HEIGHT - 1; row++)
-        {
-           if (image.getPixel(row, col))
-           {
-              ascii += 1 << (Math.abs(row - BarcodeImage.MAX_HEIGHT + 2));
-           }
-           else
-           {
-              ascii += 0;
-           }
+   public boolean translateImageToText() 
+   {
+      String translation = "";
+      for (int col = 1; col < getActualWidth(); col++)
+      {
+         int ascii = 0;
+         for (int row = BarcodeImage.MAX_HEIGHT - getActualHeight() + 1; row < BarcodeImage.MAX_HEIGHT - 1; row++)
+         {
+            if (image.getPixel(row, col))
+            {
+               ascii += 1 << (Math.abs(row - BarcodeImage.MAX_HEIGHT + 2));
+            }
+            else
+            {
+               ascii += 0;
+            }
            
-        }
-        translation += (char) ascii;
-     }
-     text = translation;
-     return true;
-   }    
+         }
+         translation += (char) ascii;
+      }
+      text = translation;
+      return true;
+   }
+   
+   /**
+    * Prints out the text string to the console.
+    */
    public void displayTextToConsole() 
    {
       System.out.println(text);
    }
+   
+   /**
+    * Prints out the image to the console.
+    */
    public void displayImageToConsole()
    {
       String onlyBarcode = "";
@@ -530,6 +570,48 @@ class DataMatrix implements BarcodeIO
          onlyBarcode += "-";
       }
       System.out.println(onlyBarcode);
-   }
-                
+   }              
 }
+
+/*******************TEST RUN***********************************************
+CSUMB CSIT online program is top notch.ª
+-------------------------------------------
+|* * * * * * * * * * * * * * * * * * * * *|
+|*                                       *|
+|****** **** ****** ******* ** *** *****  |
+|*     *    ******************************|
+|* **    * *        **  *    * * *   *    |
+|*   *    *  *****    *   * *   *  **  ***|
+|*  **     * *** **   **  *    **  ***  * |
+|***  * **   **  *   ****    *  *  ** * **|
+|*****  ***  *  * *   ** ** **  *   * *   |
+|*****************************************|
+-------------------------------------------
+You did it!  Great work.  Celebrate.ª
+----------------------------------------
+|* * * * * * * * * * * * * * * * * * * |
+|*                                    *|
+|**** *** **   ***** ****   *********  |
+|* ************ ************ **********|
+|** *      *    *  * * *         * *   |
+|***   *  *           * **    *      **|
+|* ** * *  *   * * * **  *   ***   *** |
+|* *           **    *****  *   **   **|
+|****  *  * *  * **  ** *   ** *  * *  |
+|**************************************|
+----------------------------------------
+May the Force be with you.*
+----------------------------------------
+|* * * * * * * * * * * * * * *         |
+|*                           *         |
+|**** *** ***** ** **** ***            |
+|* ******* *******************         |
+|*  * *     *      * *  * *            |
+|** *  *   *        * * ** ***         |
+|**   * * **  *  * * *   ***           |
+|*        ****  *  *     * ***         |
+|****   *  * **  * **   ***            |
+|*****************************         |
+----------------------------------------
+
+****************************************************************/
