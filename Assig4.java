@@ -499,7 +499,27 @@ class DataMatrix implements BarcodeIO
    }
    public void displayImageToConsole()
    {
+      String onlyBarcode = "";
+      for(int i = 0; i < actualWidth + 2; i++)
+      {
+         onlyBarcode += "-";
+      }
+
+      for(int row = BarcodeImage.MAX_HEIGHT - actualHeight; row < BarcodeImage.MAX_HEIGHT; row++)
+      {
+         onlyBarcode += "|";
+         for(int col = 0; col < actualWidth; col++)
+         {
+            onlyBarcode += image.getPixel(row, col) ? BLACK_CHAR : WHITE_CHAR;
+         }
+         onlyBarcode += "|\n";
+      }
       
+      for(int i = 0; i < actualWidth + 2; i++)
+      {
+         onlyBarcode += "-";
+      }
+      System.out.println(onlyBarcode);
    }
 		
 }
