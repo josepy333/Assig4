@@ -60,7 +60,6 @@ public class Assig4
         
         // creates BarcodeImage object to hold first barcode and sends to DataMatrix for decoding
         BarcodeImage bc = new BarcodeImage(sImageIn);
-        System.out.println("TEST");
         DataMatrix dm = new DataMatrix(bc);
         
         // first secret message
@@ -287,18 +286,20 @@ class DataMatrix implements BarcodeIO
    }
    
    /*
-    * 
+    * Accepts some image, represented as a BarcodeImage object to be described below, and stores a copy of this image. 
     */
    public boolean scan(BarcodeImage bc)
    {
          this.image = bc.clone();
-         System.out.println("TEST");
          cleanImage();
          actualWidth = computeSignalWidth();
          actualHeight = computeSignalHeight();
          return true;
    }
    
+   /*
+    * Move the signal to the lower-left of the larger 2D array
+    */
    private void cleanImage()
    {
       moveImageToLowerLeft();
@@ -308,9 +309,7 @@ class DataMatrix implements BarcodeIO
    private void moveImageToLowerLeft()
    {
       shiftImageLeft(horizontalScanner());
-      System.out.println("TEST");
       shiftImageDown(verticalScanner());
-      System.out.println("TEST");
    }
    
    // Shifts the image all the way down
@@ -328,7 +327,6 @@ class DataMatrix implements BarcodeIO
             image.setPixel(row, col, false);
          }
       }
-      System.out.println("TEST");
    }
    
    // Shifts the image all the way to the left
@@ -362,27 +360,22 @@ class DataMatrix implements BarcodeIO
          }
       }
       return BarcodeImage.MAX_WIDTH - 1;
-      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Scans image vertically
    private int verticalScanner()
    {
-      
       for(int row = BarcodeImage.MAX_HEIGHT - 1; row >= 0; row--)
       {
          for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
          {
             if(image.getPixel(row, col))
             {
-               System.out.println("TEST" + row);
-               
                return row;
             }
          }
       }
       return BarcodeImage.MAX_HEIGHT - 1;
-      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Accessor method to get the actual width
@@ -397,6 +390,7 @@ class DataMatrix implements BarcodeIO
       return actualHeight;
    }
    
+   // Compute the signal width
    private int computeSignalWidth()
    {
       for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
@@ -409,6 +403,7 @@ class DataMatrix implements BarcodeIO
       return BarcodeImage.MAX_WIDTH - 1;
    }
    
+   // Compute the signal height
    private int computeSignalHeight()
    {
       for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
@@ -431,6 +426,7 @@ class DataMatrix implements BarcodeIO
       }
       return false;
    }
+   
    // Method to generate BarcodeImage from text
    public boolean generateImageFromText() 
    {
@@ -477,35 +473,42 @@ class DataMatrix implements BarcodeIO
       return true;
    }
 
-   // Method to generate text from BarcodeImage
-	
-  public boolean translateImageToText() 
-  {
-     String translation = "";
-     for (int col = 1; col < getActualWidth(); col++)
-     {
-        int ascii = 0;
-	for (int row = BarcodeImage.MAX_HEIGHT - getActualHeight() + 1; row < BarcodeImage.MAX_HEIGHT - 1; row++)
-	{
-	   if (image.getPixel(row, col))
-	   {
-	      ascii += 1 << (Math.abs(row - BarcodeImage.MAX_HEIGHT + 2));
-	   }
-	   else
-	   {
-	      ascii += 0;
-	   }
+   // Method to generate text from BarcodeImage	
+   public boolean translateImageToText() 
+   {
+      String translation = "";
+      for (int col = 1; col < getActualWidth(); col++)
+      {
+         int ascii = 0;
+         for (int row = BarcodeImage.MAX_HEIGHT - getActualHeight() + 1; row < BarcodeImage.MAX_HEIGHT - 1; row++)
+         {
+            if (image.getPixel(row, col))
+            {
+               ascii += 1 << (Math.abs(row - BarcodeImage.MAX_HEIGHT + 2));
+            }
+            else
+            {
+               ascii += 0;
+            }
 	   
-	}
-	translation += (char) ascii;
-     }
-     text = translation;
-     return true;
-   }	
+         }
+         translation += (char) ascii;
+      }
+      text = translation;
+      return true;
+   }
+  
+   /*
+    *  prints out the text string to the console.
+    */
    public void displayTextToConsole() 
    {
       System.out.println(text);
    }
+   
+   /*
+    * prints out the image to the console.
+    */
    public void displayImageToConsole()
    {
       String onlyBarcode = "";
