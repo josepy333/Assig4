@@ -161,16 +161,13 @@ class BarcodeImage implements Cloneable
     */
    public boolean getPixel(int row, int col)
    {
-      if (row < 0 || col < 0)
+      try
+      {
+         return image_data[row][col];
+      } catch (IndexOutOfBoundsException e)
       {
          return false;
       }
-      if (row > MAX_HEIGHT || col > MAX_WIDTH)
-      {
-         return false;
-      }
-      
-      return image_data[row][col];
    }
    
    
@@ -183,18 +180,14 @@ class BarcodeImage implements Cloneable
     */
    public boolean setPixel(int row, int col, boolean value)
    {
-      if (row < 0 || col < 0)
+      try
+      {
+         image_data[row][col] = value;
+         return true;
+      } catch (IndexOutOfBoundsException e)
       {
          return false;
       }
-      if (row > MAX_HEIGHT || col > MAX_WIDTH)
-      {
-         return false;
-      }
-
-      image_data[row][col] = value;
-      
-      return true;
    }
    
    
