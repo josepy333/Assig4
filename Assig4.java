@@ -502,10 +502,12 @@ class DataMatrix implements BarcodeIO
      text = translation;
      return true;
    }	
+   	// Method to display text to Console
    public void displayTextToConsole() 
    {
       System.out.println(text);
    }
+   	// Method to display BarcodeImage to Console
    public void displayImageToConsole()
    {
       String onlyBarcode = "";
