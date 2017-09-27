@@ -58,7 +58,7 @@ public class Assig4
 
          };
         
-        // creates BarcodeImage object to hold first barcode and sends to DataMatrix for decoding        
+        // creates BarcodeImage object to hold first barcode and sends to DataMatrix for decoding
         BarcodeImage bc = new BarcodeImage(sImageIn);
         System.out.println("TEST");
         DataMatrix dm = new DataMatrix(bc);
@@ -72,6 +72,12 @@ public class Assig4
         bc = new BarcodeImage(sImageIn_2);
         dm.scan(bc);
         dm.translateImageToText();
+        dm.displayTextToConsole();
+        dm.displayImageToConsole();
+        
+        // Custom message
+        dm.readText("May the Force be with you.");
+        dm.generateImageFromText();
         dm.displayTextToConsole();
         dm.displayImageToConsole();
    }
@@ -126,7 +132,7 @@ class BarcodeImage implements Cloneable
       this();
       
       // Validate the length of str_data input
-image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+      image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
       
       // Validate the length of str_data input
       if (checkSize(str_data) == true) 
@@ -280,21 +286,17 @@ class DataMatrix implements BarcodeIO
       actualHeight = 0;
    }
    
+   /*
+    * 
+    */
    public boolean scan(BarcodeImage bc)
    {
-      //try
-      //{
          this.image = bc.clone();
          System.out.println("TEST");
          cleanImage();
          actualWidth = computeSignalWidth();
          actualHeight = computeSignalHeight();
          return true;
-      //} catch (CloneNotSupportedException e)
-     // {
-         // do nothing
-      //}
-      //return false; 
    }
    
    private void cleanImage()
@@ -479,21 +481,25 @@ class DataMatrix implements BarcodeIO
 	
   public boolean translateImageToText() 
   {
-     text = "";
-     for (int col = 1; col <= getActualWidth(); col++)
+     String translation = "";
+     for (int col = 1; col < getActualWidth(); col++)
      {
         int ascii = 0;
-	int i = 0;
-	for (int row = BarcodeImage.MAX_HEIGHT - 2; row >= BarcodeImage.MAX_HEIGHT - 1 - getActualHeight(); row--)
+	for (int row = BarcodeImage.MAX_HEIGHT - getActualHeight() + 1; row < BarcodeImage.MAX_HEIGHT - 1; row++)
 	{
 	   if (image.getPixel(row, col))
 	   {
-	      ascii += Math.pow(2, i);
+	      ascii += 1 << (Math.abs(row - BarcodeImage.MAX_HEIGHT + 2));
 	   }
-	   i++;
+	   else
+	   {
+	      ascii += 0;
+	   }
+	   
 	}
-	text += (char) ascii;
+	translation += (char) ascii;
      }
+     text = translation;
      return true;
    }	
    public void displayTextToConsole() 
