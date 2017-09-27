@@ -60,6 +60,7 @@ public class Assig4
         
         // creates BarcodeImage object to hold first barcode and sends to DataMatrix for decoding        
         BarcodeImage bc = new BarcodeImage(sImageIn);
+        System.out.println("TEST");
         DataMatrix dm = new DataMatrix(bc);
         
         // first secret message
@@ -122,7 +123,10 @@ class BarcodeImage implements Cloneable
     */
    public BarcodeImage(String[] str_data)
    {
-      image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+      this();
+      
+      // Validate the length of str_data input
+image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
       
       // Validate the length of str_data input
       if (checkSize(str_data) == true) 
@@ -147,8 +151,7 @@ class BarcodeImage implements Cloneable
       else 
       {
          System.out.println("The supplied data was not valid. Please try again.");
-      }
-      
+      }  
    }
    
    
@@ -277,11 +280,12 @@ class DataMatrix implements BarcodeIO
       actualHeight = 0;
    }
    
-   public boolean scan(final BarcodeImage bc)
+   public boolean scan(BarcodeImage bc)
    {
       //try
       //{
          this.image = bc.clone();
+         System.out.println("TEST");
          cleanImage();
          actualWidth = computeSignalWidth();
          actualHeight = computeSignalHeight();
@@ -302,7 +306,9 @@ class DataMatrix implements BarcodeIO
    private void moveImageToLowerLeft()
    {
       shiftImageLeft(horizontalScanner());
+      System.out.println("TEST");
       shiftImageDown(verticalScanner());
+      System.out.println("TEST");
    }
    
    // Shifts the image all the way down
@@ -314,12 +320,13 @@ class DataMatrix implements BarcodeIO
       }
       for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
       {
-         for(int row = offset; row >= 0; row++)
+         for(int row = offset; row >= 0; row--)
          {
             image.setPixel(row + (BarcodeImage.MAX_HEIGHT - offset - 1), col, image.getPixel(row, col));
             image.setPixel(row, col, false);
          }
       }
+      System.out.println("TEST");
    }
    
    // Shifts the image all the way to the left
@@ -359,12 +366,15 @@ class DataMatrix implements BarcodeIO
    // Scans image vertically
    private int verticalScanner()
    {
-      for(int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
+      
+      for(int row = BarcodeImage.MAX_HEIGHT - 1; row >= 0; row--)
       {
          for(int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
          {
             if(image.getPixel(row, col))
             {
+               System.out.println("TEST" + row);
+               
                return row;
             }
          }
@@ -497,6 +507,7 @@ class DataMatrix implements BarcodeIO
       {
          onlyBarcode += "-";
       }
+      onlyBarcode += "\n";
 
       for(int row = BarcodeImage.MAX_HEIGHT - actualHeight; row < BarcodeImage.MAX_HEIGHT; row++)
       {
