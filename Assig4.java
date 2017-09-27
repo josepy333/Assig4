@@ -286,18 +286,18 @@ class DataMatrix implements BarcodeIO
    
    public boolean scan(final BarcodeImage bc)
    {
-      try
-      {
+      //try
+      //{
          this.image = bc.clone();
          cleanImage();
          actualWidth = computeSignalWidth();
          actualHeight = computeSignalHeight();
          return true;
-      } catch (CloneNotSupportedException e)
-      {
+      //} catch (CloneNotSupportedException e)
+     // {
          // do nothing
-      }
-      return false; 
+      //}
+      //return false; 
    }
    
    private void cleanImage()
@@ -359,7 +359,8 @@ class DataMatrix implements BarcodeIO
             }
          }
       }
-      throw new RuntimeException("ERROR SCANNING");
+      return BarcodeImage.MAX_WIDTH - 1;
+      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Scans image vertically
@@ -375,7 +376,8 @@ class DataMatrix implements BarcodeIO
             }
          }
       }
-      throw new RuntimeException("ERROR SCANNING");
+      return BarcodeImage.MAX_HEIGHT - 1;
+      //throw new RuntimeException("ERROR SCANNING");
    }
    
    // Accessor method to get the actual width
@@ -392,18 +394,32 @@ class DataMatrix implements BarcodeIO
    
    private int computeSignalWidth()
    {
-      
+      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      {
+         if(!image.getPixel(BarcodeImage.MAX_HEIGHT - 1, i))
+         {
+            return i;
+         }
+      }
+      return BarcodeImage.MAX_WIDTH - 1;
    }
    
    private int computeSignalHeight()
    {
-      
+      for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
+      {
+         if(image.getPixel(i, 0))
+         {
+            return BarcodeImage.MAX_HEIGHT - i;
+         }
+      }
+      return BarcodeImage.MAX_HEIGHT - 1;
    }
    
    // Encodes a string into a barcode image
-   public boolean readText(final String text)
+   public boolean readText(String text)
    {
-      if(text.length() < image.MAX_WIDTH)
+      if(text.length() < BarcodeImage.MAX_WIDTH)
       {
          this.text = text + "*";
          return true;
